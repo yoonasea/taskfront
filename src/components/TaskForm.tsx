@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { TextField, Button, Box, Typography } from "@mui/material";
+import { TextField, Button, Box } from "@mui/material";
 import { Task } from "../types";
 
 interface TaskFormProps {
@@ -37,7 +37,7 @@ const TaskForm: React.FC<TaskFormProps> = ({
     }
     if (currentTask) {
       onUpdate(currentTask.id, { ...currentTask, title, description });
-      onCancelEdit(); // Add this line
+      onCancelEdit();
     } else {
       onCreate({ title, description, completed: false });
     }
