@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Button, Box, Alert } from '@mui/material';
+import { TextField, Button, Box, Typography } from '@mui/material';
 import { Task } from '../types';
 
 interface TaskFormProps {
@@ -32,7 +32,7 @@ const TaskForm: React.FC<TaskFormProps> = ({ onCreate, onUpdate, currentTask, on
     }
     if (currentTask) {
       onUpdate(currentTask.id, { ...currentTask, title, description });
-      onCancelEdit();
+      onCancelEdit(); // Add this line
     } else {
       onCreate({ title, description, completed: false });
     }
@@ -41,36 +41,40 @@ const TaskForm: React.FC<TaskFormProps> = ({ onCreate, onUpdate, currentTask, on
     setError('');
   };
 
+  const handleCancel = () => {
+    setTitle('');
+    setDescription('');
+    setError('');
+    onCancelEdit();
+  };
+
   return (
-    <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 2, marginBottom: 2 }}>
-      {error && <Alert severity="error">{error}</Alert>}
-      <TextField
-        label="Title"
-        variant="outlined"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        fullWidth
-        required
-      />
-      <TextField
-        label="Description"
-        variant="outlined"
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-        fullWidth
-        required
-      />
-      <Box sx={{ display: 'flex', gap: 2 }}>
-        <Button type="submit" variant="contained" color="primary">
-          {currentTask ? 'Update Task' : 'Add Task'}
-        </Button>
-        {currentTask && (
-          <Button variant="outlined" color="secondary" onClick={onCancelEdit}>
+    <form onSubmit={handleSubmit}>
+      <Box display="flex" flexDirection="column" gap={2}>
+        <TextField
+          label="Title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          error={!!error}
+          helperText={error}
+        />
+        <TextField
+          label="Description"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          error={!!error}
+          helperText={error}
+        />
+        <Box display="flex" justifyContent="flex-end" gap={1}>
+          <Button variant="contained" color="primary" type="submit">
+            {currentTask ? 'Update Task' : 'Add Task'}
+          </Button>
+          <Button variant="outlined" color="secondary" onClick={handleCancel}>
             Cancel
           </Button>
-        )}
+        </Box>
       </Box>
-    </Box>
+    </form>
   );
 };
 
