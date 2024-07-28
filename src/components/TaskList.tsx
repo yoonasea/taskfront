@@ -1,7 +1,14 @@
-import React from 'react';
-import { List, ListItem, ListItemText, IconButton, Checkbox, Box } from '@mui/material';
-import { Delete as DeleteIcon, Edit as EditIcon } from '@mui/icons-material';
-import { Task } from '../types';
+import React from "react";
+import {
+  List,
+  ListItem,
+  ListItemText,
+  IconButton,
+  Checkbox,
+  Box,
+} from "@mui/material";
+import { Delete as DeleteIcon, Edit as EditIcon } from "@mui/icons-material";
+import { Task } from "../types";
 
 interface TaskListProps {
   tasks: Task[];
@@ -10,7 +17,12 @@ interface TaskListProps {
   onToggle: (id: string, task: Task) => void;
 }
 
-const TaskList: React.FC<TaskListProps> = ({ tasks, onEdit, onDelete, onToggle }) => {
+const TaskList: React.FC<TaskListProps> = ({
+  tasks,
+  onEdit,
+  onDelete,
+  onToggle,
+}) => {
   const handleToggle = (task: Task) => {
     onToggle(task.id, { ...task, completed: !task.completed });
   };
@@ -18,15 +30,15 @@ const TaskList: React.FC<TaskListProps> = ({ tasks, onEdit, onDelete, onToggle }
   return (
     <List>
       {tasks.map((task) => (
-        <ListItem 
-          key={task.id} 
-          dense 
-          button 
-          style={{ 
-            backgroundColor: '#e0e0e0', 
-            marginBottom: '8px', 
-            borderRadius: '4px',
-            boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)'
+        <ListItem
+          key={task.id}
+          dense
+          button
+          style={{
+            backgroundColor: "#e0e0e0",
+            marginBottom: "8px",
+            borderRadius: "4px",
+            boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
           }}
         >
           <Checkbox
@@ -40,7 +52,11 @@ const TaskList: React.FC<TaskListProps> = ({ tasks, onEdit, onDelete, onToggle }
           <IconButton edge="end" aria-label="edit" onClick={() => onEdit(task)}>
             <EditIcon />
           </IconButton>
-          <IconButton edge="end" aria-label="delete" onClick={() => onDelete(task.id)}>
+          <IconButton
+            edge="end"
+            aria-label="delete"
+            onClick={() => onDelete(task.id)}
+          >
             <DeleteIcon />
           </IconButton>
         </ListItem>

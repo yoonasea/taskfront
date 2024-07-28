@@ -1,9 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import { Container, CssBaseline, Typography, Box, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from '@mui/material';
-import TaskList from './components/TaskList';
-import TaskForm from './components/TaskForm';
-import { getTasks, createTask, updateTask, deleteTask } from './api';
-import { Task } from './types';
+import React, { useState, useEffect } from "react";
+import {
+  Container,
+  CssBaseline,
+  Typography,
+  Box,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Button,
+} from "@mui/material";
+import TaskList from "./components/TaskList";
+import TaskForm from "./components/TaskForm";
+import { getTasks, createTask, updateTask, deleteTask } from "./api";
+import { Task } from "./types";
 
 const App: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -21,7 +32,7 @@ const App: React.FC = () => {
     setTasks(data);
   };
 
-  const handleCreate = async (task: Omit<Task, 'id'>) => {
+  const handleCreate = async (task: Omit<Task, "id">) => {
     const newTask = await createTask(task);
     setTasks([...tasks, newTask]);
     setTaskFormOpen(false);
@@ -29,14 +40,14 @@ const App: React.FC = () => {
 
   const handleUpdate = async (id: string, updatedTask: Task) => {
     const task = await updateTask(id, updatedTask);
-    setTasks(tasks.map(t => (t.id === id ? task : t)));
+    setTasks(tasks.map((t) => (t.id === id ? task : t)));
     setTaskFormOpen(false);
   };
 
   const handleDelete = async () => {
     if (taskToDelete) {
       await deleteTask(taskToDelete);
-      setTasks(tasks.filter(t => t.id !== taskToDelete));
+      setTasks(tasks.filter((t) => t.id !== taskToDelete));
       setDeleteDialogOpen(false);
     }
   };
@@ -58,7 +69,7 @@ const App: React.FC = () => {
 
   const handleToggle = async (id: string, task: Task) => {
     const updatedTask = await updateTask(id, task);
-    setTasks(tasks.map(t => (t.id === id ? updatedTask : t)));
+    setTasks(tasks.map((t) => (t.id === id ? updatedTask : t)));
   };
 
   const handleDeleteClick = (id: string) => {
@@ -74,29 +85,31 @@ const App: React.FC = () => {
   return (
     <Container component="main" maxWidth="md">
       <CssBaseline />
-      <Box sx={{ marginTop: 4, backgroundColor: 'background.default', padding: 2 }}>
+      <Box
+        sx={{ marginTop: 4, backgroundColor: "background.default", padding: 2 }}
+      >
         <Typography variant="h2" align="center" gutterBottom>
           Task Manager
         </Typography>
         <Button variant="contained" color="primary" onClick={handleAddNew}>
           Add Task
         </Button>
-        <TaskList 
-          tasks={tasks} 
-          onEdit={handleEdit} 
-          onDelete={handleDeleteClick} 
-          onToggle={handleToggle} 
+        <TaskList
+          tasks={tasks}
+          onEdit={handleEdit}
+          onDelete={handleDeleteClick}
+          onToggle={handleToggle}
         />
       </Box>
 
       <Dialog open={isTaskFormOpen} onClose={handleCancelEdit}>
-        <DialogTitle>{currentTask ? 'Edit Task' : 'Add Task'}</DialogTitle>
+        <DialogTitle>{currentTask ? "Edit Task" : "Add Task"}</DialogTitle>
         <DialogContent>
-          <TaskForm 
-            onCreate={handleCreate} 
-            onUpdate={handleUpdate} 
-            currentTask={currentTask} 
-            onCancelEdit={handleCancelEdit} 
+          <TaskForm
+            onCreate={handleCreate}
+            onUpdate={handleUpdate}
+            currentTask={currentTask}
+            onCancelEdit={handleCancelEdit}
           />
         </DialogContent>
       </Dialog>
@@ -109,7 +122,11 @@ const App: React.FC = () => {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleDeleteCancel} variant="outlined" color="primary">
+          <Button
+            onClick={handleDeleteCancel}
+            variant="outlined"
+            color="primary"
+          >
             Cancel
           </Button>
           <Button onClick={handleDelete} variant="contained" color="primary">

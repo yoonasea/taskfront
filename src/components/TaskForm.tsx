@@ -1,33 +1,38 @@
-import React, { useState, useEffect } from 'react';
-import { TextField, Button, Box, Typography } from '@mui/material';
-import { Task } from '../types';
+import React, { useState, useEffect } from "react";
+import { TextField, Button, Box, Typography } from "@mui/material";
+import { Task } from "../types";
 
 interface TaskFormProps {
-  onCreate: (task: Omit<Task, 'id'>) => void;
+  onCreate: (task: Omit<Task, "id">) => void;
   onUpdate: (id: string, task: Task) => void;
   currentTask: Task | null;
   onCancelEdit: () => void;
 }
 
-const TaskForm: React.FC<TaskFormProps> = ({ onCreate, onUpdate, currentTask, onCancelEdit }) => {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [error, setError] = useState('');
+const TaskForm: React.FC<TaskFormProps> = ({
+  onCreate,
+  onUpdate,
+  currentTask,
+  onCancelEdit,
+}) => {
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [error, setError] = useState("");
 
   useEffect(() => {
     if (currentTask) {
       setTitle(currentTask.title);
       setDescription(currentTask.description);
     } else {
-      setTitle('');
-      setDescription('');
+      setTitle("");
+      setDescription("");
     }
   }, [currentTask]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (title.trim() === '' || description.trim() === '') {
-      setError('Title and Description are required.');
+    if (title.trim() === "" || description.trim() === "") {
+      setError("Title and Description are required.");
       return;
     }
     if (currentTask) {
@@ -36,15 +41,15 @@ const TaskForm: React.FC<TaskFormProps> = ({ onCreate, onUpdate, currentTask, on
     } else {
       onCreate({ title, description, completed: false });
     }
-    setTitle('');
-    setDescription('');
-    setError('');
+    setTitle("");
+    setDescription("");
+    setError("");
   };
 
   const handleCancel = () => {
-    setTitle('');
-    setDescription('');
-    setError('');
+    setTitle("");
+    setDescription("");
+    setError("");
     onCancelEdit();
   };
 
@@ -67,7 +72,7 @@ const TaskForm: React.FC<TaskFormProps> = ({ onCreate, onUpdate, currentTask, on
         />
         <Box display="flex" justifyContent="flex-end" gap={1}>
           <Button variant="contained" color="primary" type="submit">
-            {currentTask ? 'Update Task' : 'Add Task'}
+            {currentTask ? "Update Task" : "Add Task"}
           </Button>
           <Button variant="outlined" color="secondary" onClick={handleCancel}>
             Cancel
