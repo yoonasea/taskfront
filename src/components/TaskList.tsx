@@ -5,15 +5,11 @@ import { Task } from '../types';
 
 interface TaskListProps {
   tasks: Task[];
-  onUpdate: (id: string, updatedTask: Omit<Task, 'id'>) => void;
+  onEdit: (task: Task) => void;
   onDelete: (id: string) => void;
 }
 
-const TaskList: React.FC<TaskListProps> = ({ tasks, onUpdate, onDelete }) => {
-  const handleToggle = (task: Task) => {
-    onUpdate(task.id, { ...task, completed: !task.completed });
-  };
-
+const TaskList: React.FC<TaskListProps> = ({ tasks, onEdit, onDelete }) => {
   return (
     <List>
       {tasks.map((task) => (
@@ -23,10 +19,10 @@ const TaskList: React.FC<TaskListProps> = ({ tasks, onUpdate, onDelete }) => {
             checked={task.completed}
             tabIndex={-1}
             disableRipple
-            onClick={() => handleToggle(task)}
+            onClick={() => onEdit({ ...task, completed: !task.completed })}
           />
           <ListItemText primary={task.title} secondary={task.description} />
-          <IconButton edge="end" aria-label="edit">
+          <IconButton edge="end" aria-label="edit" onClick={() => onEdit(task)}>
             <EditIcon />
           </IconButton>
           <IconButton edge="end" aria-label="delete" onClick={() => onDelete(task.id)}>

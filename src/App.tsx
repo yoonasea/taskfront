@@ -7,6 +7,7 @@ import { Task } from './types';
 
 const App: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [currentTask, setCurrentTask] = useState<Task | null>(null);
 
   useEffect(() => {
     fetchTasks();
@@ -22,8 +23,8 @@ const App: React.FC = () => {
     setTasks([...tasks, newTask]);
   };
 
-  const handleUpdate = async (id: string, updatedTask: Omit<Task, 'id'>) => {
-    const task = await updateTask(id, { ...updatedTask, id });
+  const handleUpdate = async (id: string, updatedTask: Task) => {
+    const task = await updateTask(id, updatedTask);
     setTasks(tasks.map(t => (t.id === id ? task : t)));
   };
 
@@ -32,15 +33,28 @@ const App: React.FC = () => {
     setTasks(tasks.filter(t => t.id !== id));
   };
 
+  const handleEdit = (task: Task) => {
+    setCurrentTask(task);
+  };
+
+  const handleCancelEdit = () => {
+    setCurrentTask(null);
+  };
+
   return (
     <Container component="main" maxWidth="md">
       <CssBaseline />
-      <Box sx={{ marginTop: 4 }}>
+      <Box sx={{ marginTop: 4, backgroundColor: 'background.default', padding: 2 }}>
         <Typography variant="h2" align="center" gutterBottom>
           Task Manager
         </Typography>
-        <TaskForm onCreate={handleCreate} />
-        <TaskList tasks={tasks} onUpdate={handleUpdate} onDelete={handleDelete} />
+        <TaskForm 
+          onCreate={handleCreate} 
+          onUpdate={handleUpdate} 
+          currentTask={currentTask} 
+          onCancelEdit={handleCancelEdit} 
+        />
+        <TaskList tasks={tasks} onEdit={handleEdit} onDelete={handleDelete} />
       </Box>
     </Container>
   );

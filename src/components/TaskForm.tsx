@@ -1,15 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TextField, Button, Box, Alert } from '@mui/material';
 import { Task } from '../types';
 
 interface TaskFormProps {
   onCreate: (task: Omit<Task, 'id'>) => void;
+  onUpdate: (id: string, task: Task) => void;
+  currentTask: Task | null;
+  onCancelEdit: () => void;
 }
 
-const TaskForm: React.FC<TaskFormProps> = ({ onCreate }) => {
+const TaskForm: React.FC<TaskFormProps> = ({ onCreate, onUpdate, currentTask, onCancelEdit }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    if (currentTask) {
+      setTitle(currentTask.title);
+      setDescription(currentTask.description);
+    } else {
+      setTitle('');
+      setDescription('');
+    }
+  }, [currentTask]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -17,7 +30,12 @@ const TaskForm: React.FC<TaskFormProps> = ({ onCreate }) => {
       setError('Title and Description are required.');
       return;
     }
-    onCreate({ title, description, completed: false });
+    if (currentTask) {
+      onUpdate(currentTask.id, { ...currentTask, title, description });
+      onCancelEdit();
+    } else {
+      onCreate({ title, description, completed: false });
+    }
     setTitle('');
     setDescription('');
     setError('');
@@ -42,9 +60,16 @@ const TaskForm: React.FC<TaskFormProps> = ({ onCreate }) => {
         fullWidth
         required
       />
-      <Button type="submit" variant="contained" color="primary">
-        Add Task
-      </Button>
+      <Box sx={{ display: 'flex', gap: 2 }}>
+        <Button type="submit" variant="contained" color="primary">
+          {currentTask ? 'Update Task' : 'Add Task'}
+        </Button>
+        {currentTask && (
+          <Button variant="outlined" color="secondary" onClick={onCancelEdit}>
+            Cancel
+          </Button>
+        )}
+      </Box>
     </Box>
   );
 };
