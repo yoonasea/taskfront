@@ -7,9 +7,14 @@ interface TaskListProps {
   tasks: Task[];
   onEdit: (task: Task) => void;
   onDelete: (id: string) => void;
+  onToggle: (id: string, task: Task) => void;
 }
 
-const TaskList: React.FC<TaskListProps> = ({ tasks, onEdit, onDelete }) => {
+const TaskList: React.FC<TaskListProps> = ({ tasks, onEdit, onDelete, onToggle }) => {
+  const handleToggle = (task: Task) => {
+    onToggle(task.id, { ...task, completed: !task.completed });
+  };
+
   return (
     <List>
       {tasks.map((task) => (
@@ -19,7 +24,7 @@ const TaskList: React.FC<TaskListProps> = ({ tasks, onEdit, onDelete }) => {
             checked={task.completed}
             tabIndex={-1}
             disableRipple
-            onClick={() => onEdit({ ...task, completed: !task.completed })}
+            onClick={() => handleToggle(task)}
           />
           <ListItemText primary={task.title} secondary={task.description} />
           <IconButton edge="end" aria-label="edit" onClick={() => onEdit(task)}>

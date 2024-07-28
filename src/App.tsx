@@ -41,6 +41,11 @@ const App: React.FC = () => {
     setCurrentTask(null);
   };
 
+  const handleToggle = async (id: string, task: Task) => {
+    const updatedTask = await updateTask(id, task);
+    setTasks(tasks.map(t => (t.id === id ? updatedTask : t)));
+  };
+
   return (
     <Container component="main" maxWidth="md">
       <CssBaseline />
@@ -54,7 +59,12 @@ const App: React.FC = () => {
           currentTask={currentTask} 
           onCancelEdit={handleCancelEdit} 
         />
-        <TaskList tasks={tasks} onEdit={handleEdit} onDelete={handleDelete} />
+        <TaskList 
+          tasks={tasks} 
+          onEdit={handleEdit} 
+          onDelete={handleDelete} 
+          onToggle={handleToggle} 
+        />
       </Box>
     </Container>
   );
