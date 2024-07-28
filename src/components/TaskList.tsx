@@ -1,5 +1,5 @@
 import React from 'react';
-import { List, ListItem, ListItemText, IconButton, Checkbox } from '@mui/material';
+import { List, ListItem, ListItemText, IconButton, Checkbox, Box } from '@mui/material';
 import { Delete as DeleteIcon, Edit as EditIcon } from '@mui/icons-material';
 import { Task } from '../types';
 
@@ -18,7 +18,17 @@ const TaskList: React.FC<TaskListProps> = ({ tasks, onEdit, onDelete, onToggle }
   return (
     <List>
       {tasks.map((task) => (
-        <ListItem key={task.id} dense button>
+        <ListItem 
+          key={task.id} 
+          dense 
+          button 
+          style={{ 
+            backgroundColor: '#e0e0e0', 
+            marginBottom: '8px', 
+            borderRadius: '4px',
+            boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)'
+          }}
+        >
           <Checkbox
             edge="start"
             checked={task.completed}
