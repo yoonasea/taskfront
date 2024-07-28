@@ -3,8 +3,16 @@ import { Task } from './types';
 const API_URL = 'http://localhost:5000/api/tasks';
 
 export const getTasks = async (): Promise<Task[]> => {
-  const response = await fetch(API_URL);
-  return response.json();
+  try {
+    const response = await fetch(API_URL);
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return response.json();
+  } catch (error) {
+    alert('Failed to fetch tasks. Server is down.');
+    return [];
+  }
 };
 
 export const createTask = async (task: Omit<Task, 'id'>): Promise<Task> => {
